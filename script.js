@@ -1,18 +1,25 @@
-const container = document.getElementById('container');
+const grid = document.getElementById('grid');
 const btn = document.querySelector('button');
-const grid_size = 16;
+let grid_size = 16;
 let grid_item;
-let press;
+let press = 'black';
 
-function initializeGrid(rows, cols){
-    container.style.setProperty('--grid-rows', rows);
-    container.style.setProperty('--grid-cols', cols);
-    for(let i = 0; i < (rows*cols); i++)
+function resetGrid(){
+    while(grid.firstChild){
+      grid.removeChild(grid.firstChild);
+    }
+    initializeGrid(grid_size);
+}
+
+function initializeGrid(size){
+    grid.style.setProperty('--grid-rows', size);
+    grid.style.setProperty('--grid-cols', size);
+    for(let i = 0; i < (size*size); i++)
     {
         let cell = document.createElement('div');
-        container.appendChild(cell).className = 'grid-item';
+        grid.appendChild(cell).className = 'grid-item';
     };
-    paintGrid('black');
+    paintGrid(press);
 };
 
 function paintGrid(color){
@@ -43,4 +50,20 @@ document.getElementById('black').addEventListener('click',function(){
 document.getElementById('rainbow').addEventListener('click',function(){
     press = 'rainbow';
     paintGrid(press);
+});
+document.getElementById('erase').addEventListener('click', function(){
+    resetGrid();
+});
+document.getElementById('resize').addEventListener('click', function(){
+    let aux = parseInt(prompt('Please enter the desired size for your canvas(up to 100).', '16'));
+    if(aux <= 100)
+    {
+        grid_size = aux;
+        resetGrid();
+    }
+    else
+    {
+        alert("Please enter a size lower or equal to 100!");
+    }
+    
 });
